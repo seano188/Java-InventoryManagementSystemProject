@@ -17,6 +17,5 @@ Some of the basic functionalities developed includes:
 - Username: admin2 | Password: password
   
 2. Mechanic users:
-- Username: sankalp | Password: sankalp
 - Username: team8ca | Password: team8ca
 - Username: mechanic | Password: mechanic
