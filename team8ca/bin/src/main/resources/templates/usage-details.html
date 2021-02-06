@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Bookings List</title>
+	<link rel="stylesheet" type="text/css" media="all" href="../../css/style.css" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+<h2>Usage form for task: </h2>
+<h2 th:text=${usageform.tasks}>Tasks</h2>
+	
+	<table>
+		<tr>
+			<th>Usage Details ID</th>
+			<th>Part ID</th>
+			<th>Part Description</th>
+			<th>Part Colour</th>
+			<th>Part Dimension</th>
+			<th>Brand</th>
+			<th>Part Manufacturer</th>
+			<th>Remaining Stock</th>
+			<th>Current Usage</th>
+			<th>Last update date</th>
+			<th>Update Usage</th>
+			<th>Delete</th>
+		</tr>
+		<tr th:each="ud:${udList}">
+			<td th:text=${ud.id}>id</td>
+			<td th:text=${ud.inventory.id}>part id</td>
+			<td th:text=${ud.inventory.description}>part description</td>
+			<td th:text=${ud.inventory.colour}>part colour</td>
+			<td th:text=${ud.inventory.dimension}>part dimension</td>
+			<td th:text=${ud.inventory.brand.brandName}>part brand</td>
+			<td th:text=${ud.inventory.brand.manufacturerName}>part
+				manufacturer</td>
+			<td th:text=${ud.inventory.stockQty}>remaining stock</td>
+			<td th:text=${ud.quantity}>0</td>
+			<td th:text=${ud.date}>date</td>
+			<td>
+				<form name="updateQuantity" th:action="@{/invusage/usage/}+${usageform.id}+@{/ud/}+${ud.id}"
+					method="get">
+					<label>Quantity used:</label> <input type='text' name='ud_quantity' value="0" />
+					<label>&nbsp;</label> <input type="submit" value="Update" class="btn">
+				</form>
+			</td>
+			<td><a href="DeleteUd.html"
+					th:href="@{/invusage/delete/usageforms/}+${usageform.id}+@{/ud/}+${ud.id}">Delete</a>
+
+			</td>
+		</tr>
+	</table>
+	<br />
+	<br />
+	<table>
+		<tr>
+			<td>
+				<form name="invSearch" th:action="@{/invusage/usageforms/search/}+${usageform.id}">
+					Search:<input type="text" name="keyword" value="" /> &nbsp; <input type="submit" value="Search" />
+				</form>
+			</td>
+		</tr>
+	</table>
+	<table>
+		<tr>
+			<th>Inventory ID</th>
+			<th>Inventory Description</th>
+			<th>Inventory Colour</th>
+			<th>Inventory Dimension</th>
+			<th>Inventory Brand</th>
+			<th>Inventory Manufacturer</th>
+			<th>Inventory Category</th>
+			<th>Inventory Subcategory</th>
+			<th>Inventory remaining quantity</th>
+			<th>Inventory Transaction History</th>
+			<th>Add To Usage Form</th>
+		</tr>
+		<br />
+		<br />
+		<tr th:each="inv:${invList}">
+			<td th:text=${inv.id}>part id</td>
+			<td th:text=${inv.description}>part description</td>
+			<td th:text=${inv.colour}>part colour</td>
+			<td th:text=${inv.dimension}>part dimension</td>
+			<td th:text=${inv.brand.brandName}>part brand</td>
+			<td th:text=${inv.brand.manufacturerName}>part manufacturer</td>
+			<td th:text=${inv.subcategory.category.categoryName}>part
+				category</td>
+			<td th:text=${inv.subcategory.subcategoryName}>part sub category</td>
+			<td th:text=${inv.stockQty}>remaining quantity</td>
+			<td>
+				<form th:action="@{/report/generate}" method="POST">
+					<input type="hidden" name="productId" th:value="${inv.id}">
+					<input type="hidden" name="startDate" th:value="${null}">
+					<button type="submit">Transaction history</button>
+				</form>
+			</td>
+			<td><a href="AddUd.html" th:href="@{/invusage/usageforms/}+${inv.id}+@{/addinvtoform/}+${usageform.id}">Add
+					to Form</a></td>
+		</tr>
+	</table>
+</body>
+
+</html>

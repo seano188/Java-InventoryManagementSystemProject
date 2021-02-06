@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="headerfiles">
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+<title>Inventory Management System</title>
+<link type="text/css" media="all" th:href="@{/css/bootstrap.css}"
+	rel="stylesheet">
+<link type="text/css" media="all" th:href="@{/css/font-awesome.min.css}"
+	rel="stylesheet">
+<link type="text/css" media="all"
+	th:href="@{/css/linearicons/style.css}" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
+	rel="stylesheet">
+<link type="text/css" media="all" th:href="@{/css/main.css}"
+	rel="stylesheet">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:fragment="sidebar-viewProducts" id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">		
+						<li><a th:href="@{~/inventory/list}" class="active"><i class="lnr lnr-car"></i> <span>View Products</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/inventory/addproduct}" class=""><i class="lnr lnr-file-add"></i><span>Stock Entry Forms</span></a></li>
+						</div>
+						<li><a th:href="@{~/invusage/showlisting}" class=""><i class="lnr lnr-list"></i> <span>Stock Usage Forms</span></a></li>
+						<li><a th:href="@{~/report/form}" class=""><i class="lnr lnr-chart-bars"></i> <span>Transaction Report</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/supplier/list}" class=""><i class="lnr lnr-store"></i> <span>Manage Suppliers</span></a></li>
+						</div>
+							<li><a th:href="@{~/customer/list}" class=""><i class="lnr lnr-users"></i> <span>Manage Customers</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/user/list}" class=""><i class="lnr lnr-cog"></i> <span>Manage Users</span></a></li>
+						</div>			
+					</ul>
+				</nav>
+			</div>
+		</div>		
+		<div th:fragment="sidebar-entryForm" id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">		
+						<li><a th:href="@{~/inventory/list}" class="active"><i class="lnr lnr-car"></i> <span>View Products</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/inventory/addproduct}" class=""><i class="lnr lnr-file-add"></i><span>Stock Entry Forms</span></a></li>
+						</div>
+						<li><a th:href="@{~/invusage/showlisting}" class=""><i class="lnr lnr-list"></i> <span>Stock Usage Forms</span></a></li>
+						<li><a th:href="@{~/report/form}" class=""><i class="lnr lnr-chart-bars"></i> <span>Transaction Report</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/supplier/list}" class=""><i class="lnr lnr-store"></i> <span>Manage Suppliers</span></a></li>
+						</div>
+							<li><a th:href="@{~/customer/list}" class=""><i class="lnr lnr-users"></i> <span>Manage Customers</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/user/list}" class=""><i class="lnr lnr-cog"></i> <span>Manage Users</span></a></li>
+						</div>			
+					</ul>
+				</nav>
+			</div>
+		</div>		
+		<div th:fragment="sidebar-invUsage" id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">		
+						<li><a th:href="@{~/inventory/list}" class="active"><i class="lnr lnr-car"></i> <span>View Products</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/inventory/addproduct}" class=""><i class="lnr lnr-file-add"></i><span>Stock Entry Forms</span></a></li>
+						</div>
+						<li><a th:href="@{~/invusage/showlisting}" class=""><i class="lnr lnr-list"></i> <span>Stock Usage Forms</span></a></li>
+						<li><a th:href="@{~/report/form}" class=""><i class="lnr lnr-chart-bars"></i> <span>Transaction Report</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/supplier/list}" class=""><i class="lnr lnr-store"></i> <span>Manage Suppliers</span></a></li>
+						</div>
+							<li><a th:href="@{~/customer/list}" class=""><i class="lnr lnr-users"></i> <span>Manage Customers</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/user/list}" class=""><i class="lnr lnr-cog"></i> <span>Manage Users</span></a></li>
+						</div>			
+					</ul>
+				</nav>
+			</div>
+		</div>		
+		<div th:fragment="sidebar-transReport" id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">		
+						<li><a th:href="@{~/inventory/list}" class="active"><i class="lnr lnr-car"></i> <span>View Products</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/inventory/addproduct}" class=""><i class="lnr lnr-file-add"></i><span>Stock Entry Forms</span></a></li>
+						</div>
+						<li><a th:href="@{~/invusage/showlisting}" class=""><i class="lnr lnr-list"></i> <span>Stock Usage Forms</span></a></li>
+						<li><a th:href="@{~/report/form}" class=""><i class="lnr lnr-chart-bars"></i> <span>Transaction Report</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/supplier/list}" class=""><i class="lnr lnr-store"></i> <span>Manage Suppliers</span></a></li>
+						</div>
+							<li><a th:href="@{~/customer/list}" class=""><i class="lnr lnr-users"></i> <span>Manage Customers</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/user/list}" class=""><i class="lnr lnr-cog"></i> <span>Manage Users</span></a></li>
+						</div>			
+					</ul>
+				</nav>
+			</div>
+		</div>		
+		<div th:fragment="sidebar-supplier" id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">		
+						<li><a th:href="@{~/inventory/list}" class="active"><i class="lnr lnr-car"></i> <span>View Products</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/inventory/addproduct}" class=""><i class="lnr lnr-file-add"></i><span>Stock Entry Forms</span></a></li>
+						</div>
+						<li><a th:href="@{~/invusage/showlisting}" class=""><i class="lnr lnr-list"></i> <span>Stock Usage Forms</span></a></li>
+						<li><a th:href="@{~/report/form}" class=""><i class="lnr lnr-chart-bars"></i> <span>Transaction Report</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/supplier/list}" class=""><i class="lnr lnr-store"></i> <span>Manage Suppliers</span></a></li>
+						</div>
+							<li><a th:href="@{~/customer/list}" class=""><i class="lnr lnr-users"></i> <span>Manage Customers</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/user/list}" class=""><i class="lnr lnr-cog"></i> <span>Manage Users</span></a></li>
+						</div>			
+					</ul>
+				</nav>
+			</div>
+		</div>		
+		<div th:fragment="sidebar-customer" id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">		
+						<li><a th:href="@{~/inventory/list}" class="active"><i class="lnr lnr-car"></i> <span>View Products</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/inventory/addproduct}" class=""><i class="lnr lnr-file-add"></i><span>Stock Entry Forms</span></a></li>
+						</div>
+						<li><a th:href="@{~/invusage/showlisting}" class=""><i class="lnr lnr-list"></i> <span>Stock Usage Forms</span></a></li>
+						<li><a th:href="@{~/report/form}" class=""><i class="lnr lnr-chart-bars"></i> <span>Transaction Report</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/supplier/list}" class=""><i class="lnr lnr-store"></i> <span>Manage Suppliers</span></a></li>
+						</div>
+							<li><a th:href="@{~/customer/list}" class=""><i class="lnr lnr-users"></i> <span>Manage Customers</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/user/list}" class=""><i class="lnr lnr-cog"></i> <span>Manage Users</span></a></li>
+						</div>			
+					</ul>
+				</nav>
+			</div>
+		</div>		
+		<div th:fragment="sidebar-user" id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">		
+						<li><a th:href="@{~/inventory/list}" class="active"><i class="lnr lnr-car"></i> <span>View Products</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/inventory/addproduct}" class=""><i class="lnr lnr-file-add"></i><span>Stock Entry Forms</span></a></li>
+						</div>
+						<li><a th:href="@{~/invusage/showlisting}" class=""><i class="lnr lnr-list"></i> <span>Stock Usage Forms</span></a></li>
+						<li><a th:href="@{~/report/form}" class=""><i class="lnr lnr-chart-bars"></i> <span>Transaction Report</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/supplier/list}" class=""><i class="lnr lnr-store"></i> <span>Manage Suppliers</span></a></li>
+						</div>
+							<li><a th:href="@{~/customer/list}" class=""><i class="lnr lnr-users"></i> <span>Manage Customers</span></a></li>
+						<div sec:authorize="hasAuthority('ADMIN')">
+							<li><a th:href="@{~/user/list}" class=""><i class="lnr lnr-cog"></i> <span>Manage Users</span></a></li>
+						</div>			
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+

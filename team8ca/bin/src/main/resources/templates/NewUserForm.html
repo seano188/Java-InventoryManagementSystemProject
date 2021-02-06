@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>User Form</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../../css/style.css" th:href="@{/css/style.css}" />
+</head>
+<body>
+	<header th:insert="fragments/general.html :: header"> </header>
+	<div th:replace="fragments/general.html :: menu"></div>
+
+	<h1>User Form</h1>
+	<form action="#" th:object="${user}" th:action="@{/user/save}"
+		method="post">
+		<fieldset>
+			<input type="hidden" th:field="*{userId}">
+		</fieldset>
+		<fieldset>
+			First Name <input type="text" th:field="*{firstName}">
+			<p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
+		</fieldset>
+		<fieldset>
+			Last Name <input type="text" th:field="*{lastName}">
+			<p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
+		</fieldset>
+		<fieldset>
+			<input type="submit" value="Save" /> &nbsp; &nbsp; <input
+				type="reset" value="Reset" />
+		</fieldset>
+
+	</form>
+	<br />
+	<div th:replace="fragments/general.html :: footer"></div>
+</body>
+</html>

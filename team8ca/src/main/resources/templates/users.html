@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="ISO-8859-1">
+<title>Users Listing</title>
+<meta charset="ISO-8859-1">
+<link type="text/css" media="all" href="../static/css/bootstrap.min.css"
+	th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<link type="text/css" media="all"
+	href="../static/css/font-awesome.min.css"
+	th:href="@{/css/font-awesome.min.css}" rel="stylesheet">
+<link type="text/css" media="all"
+	href="../static/css/linearicons/style.css"
+	th:href="@{/css/linearicons/style.css}" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
+	rel="stylesheet">
+<link type="text/css" media="all" href="../static/css/main.css"
+	th:href="@{/css/main.css}" rel="stylesheet">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+	<!-- <div th:replace="fragments/layout.html :: navbar"></div> -->
+	<div id="wrapper">
+		<!-- navbar -->
+		<nav th:replace="fragments/layout.html :: navbar"></nav>
+
+		<div th:fragment="sidebar-user" id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">
+						<li><a th:href="@{~/inventory/list}" class=""><i
+								class="lnr lnr-car"></i> <span>View Products</span></a></li>
+						<li sec:authorize="hasAuthority('ADMIN')"><a
+							th:href="@{~/inventory/addproduct}" class=""><i
+								class="lnr lnr-file-add"></i><span>Stock Entry Forms</span></a></li>
+						<li><a th:href="@{~/invusage/showlisting}" class=""><i
+								class="lnr lnr-list"></i> <span>Stock Usage Forms</span></a></li>
+						<li><a th:href="@{~/report/form}" class=""><i
+								class="lnr lnr-chart-bars"></i> <span>Transaction Report</span></a></li>
+						<li><a th:href="@{~/supplier/list}" class=""><i
+								class="lnr lnr-store"></i> <span>Manage Suppliers</span></a></li>
+						<li><a th:href="@{~/customer/list}" class=""><i
+								class="lnr lnr-users"></i> <span>Manage Customers</span></a></li>
+						<li><a th:href="@{~/user/list}" class="active"><i
+								class="lnr lnr-cog"></i> <span>Manage Users</span></a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+
+		<div class="main">
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<div class="panel">
+						<div class="panel-heading">
+							<h2>Manage User</h2>
+						</div>
+
+						<div th:if="${error == 'thiu-exist'}"
+							class="alert alert-danger alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<i class="lnr lnr-warning"></i> User cannot be deleted as he/she
+							is associated with existing transaction history and inventory
+							usage records.
+						</div>
+
+						<div th:if="${error == 'user-exist'}"
+							class="alert alert-danger alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<i class="lnr lnr-warning"></i> User is currently logged in. Cannot be deleted.
+						</div>
+
+						<div class="panel-body" style="overflow-x: auto;">
+							<div sec:authorize="hasAuthority('ADMIN')">
+								<a th:href="@{/user/add}" class="btn btn-primary">Add User</a>
+							</div>
+							<br>
+
+							<div class="row">
+								<div class="col-lg-8">
+									<form name="searchwithPage"
+										th:action="@{'/user/search/page/1/5' + '?keyword=' + ${keyword} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
+										<div class="input-group" style="width: 310px">
+											<input type="text" name="keyword" th:value="${keyword}"
+												value=" " required class="form-control"
+												placeholder="Search for users" /> <input type="hidden"
+												name="sortField" th:value="${sortField}"> <input
+												type="hidden" name="sortDir" th:value="${sortDir}">
+											<span class="input-group-btn"><input type="submit"
+												value="Search" class="btn btn-primary" /></span>
+										</div>
+									</form>
+								</div>
+								<div class="col-lg-4">
+
+									<div class="dropdown pull-right">
+										<button type="button" id="dropdownMenu1"
+											data-toggle="dropdown" class="btn btn-primary">
+											Entries Per Page<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu" role="menu"
+											aria-labelledby="dropdownMenu1">
+											<li role="presentation"><a th:if="${keyword == null}"
+												role="menuitem" tabindex="-1"
+												th:href="@{'/user/search/page1'+'?pageNo=' + ${1} + '&pageSize=' + ${5} +'&keyword=' +'&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">5</a>
+											</li>
+											<li role="presentation"><a th:if="${keyword == null}"
+												role="menuitem" tabindex="-1"
+												th:href="@{'/user/search/page1'+'?pageNo=1' + '&pageSize=10' + '&keyword=' +'&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">10</a>
+											</li>
+											<li role="presentation"><a th:if="${keyword == null}"
+												role="menuitem" tabindex="-1"
+												th:href="@{'/user/search/page1'+'?pageNo=1' + '&pageSize=20' + '&keyword=' +'&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">20</a>
+											</li>
+											<li role="presentation"><a th:if="${keyword!= null}"
+												role="menuitem" tabindex="-1"
+												th:href="@{'/user/search/page1'+'?pageNo=' + ${1} + '&pageSize=' + ${5} +'&keyword=' + ${keyword} +'&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">5</a>
+											</li>
+											<li role="presentation"><a th:if="${keyword != null}"
+												role="menuitem" tabindex="-1"
+												th:href="@{'/user/search/page1'+'?pageNo=1' + '&pageSize=10' + '&keyword=' + ${keyword} +'&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">10</a>
+											</li>
+											<li role="presentation"><a th:if="${keyword != null}"
+												role="menuitem" tabindex="-1"
+												th:href="@{'/user/search/page1'+'?pageNo=1' + '&pageSize=20' + '&keyword=' + ${keyword} +'&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">20</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<br>
+							<table class="table table-striped">
+								<tr>
+									<th th:if="${keyword != null}"><a
+										th:href="@{'/user/search/page/' + ${currentPage} + '/'+ ${pageSize} + '?keyword=' + ${keyword} +'&sortField=id&sortDir=' + ${reverseSortDir}}">
+											User Id</a></th>
+									<th th:if="${keyword != null}"><a
+										th:href="@{'/user/search/page/' + ${currentPage} + '/'+ ${pageSize} + '?keyword=' + ${keyword} +'&sortField=firstName&sortDir=' + ${reverseSortDir}}">
+											First Name</a></th>
+									<th th:if="${keyword != null}"><a
+										th:href="@{'/user/search/page/' + ${currentPage} + '/'+ ${pageSize} + '?keyword=' + ${keyword} +'&sortField=lastName&sortDir=' + ${reverseSortDir}}">
+											Last Name</a></th>
+									<th th:if="${keyword != null}"><a
+										th:href="@{'/user/search/page/' + ${currentPage} + '/'+ ${pageSize} + '?keyword=' + ${keyword} +'&sortField=userName&sortDir=' + ${reverseSortDir}}">
+											User Name</a></th>
+									<th th:if="${keyword != null}"><a
+										th:href="@{'/user/search/page/' + ${currentPage} + '/'+ ${pageSize} + '?keyword=' + ${keyword} +'&sortField=email&sortDir=' + ${reverseSortDir}}">
+											Email</a></th>
+									<th th:if="${keyword != null}"><a
+										th:href="@{'/user/search/page/' + ${currentPage} + '/'+ ${pageSize} + '?keyword=' + ${keyword} +'&sortField=contactNo&sortDir=' + ${reverseSortDir}}">
+											Contact no.</a></th>
+									<th th:if="${keyword != null}"><a
+										th:href="@{'/user/search/page/' + ${currentPage} + '/'+ ${pageSize} + '?keyword=' + ${keyword} +'&sortField=address&sortDir=' + ${reverseSortDir}}">
+											Address</a></th>
+
+									<th th:if="${keyword == null}"><a
+										th:href="@{'/user/search/page/' + ${currentPage} + '/'+ ${pageSize} + '?keyword=' +'&sortField=id&sortDir=' + ${reverseSortDir}}">
+											User Id</a></th>
+									<th th:if="${keyword == null}"><a
+										th:href="@{'/user/search/page/' + ${currentPage} + '/'+ ${pageSize} + '?keyword=' +'&sortField=firstName&sortDir=' + ${reverseSortDir}}">
+											First Name</a></th>
+									<th th:if="${keyword == null}"><a
+										th:href="@{'/user/search/page/' + ${currentPage} + '/'+ ${pageSize} + '?keyword=' +'&sortField=lastName&sortDir=' + ${reverseSortDir}}">
+											Last Name</a></th>
+									<th th:if="${keyword == null}"><a
+										th:href="@{'/user/search/page/' + ${currentPage} + '/'+ ${pageSize} + '?keyword=' +'&sortField=userName&sortDir=' + ${reverseSortDir}}">
+											User Name</a></th>
+									<th th:if="${keyword == null}"><a
+										th:href="@{'/user/search/page/' + ${currentPage} + '/'+ ${pageSize} + '?keyword=' +'&sortField=email&sortDir=' + ${reverseSortDir}}">
+											Email</a></th>
+									<th th:if="${keyword == null}"><a
+										th:href="@{'/user/search/page/' + ${currentPage} + '/'+ ${pageSize} + '?keyword=' +'&sortField=contactNo&sortDir=' + ${reverseSortDir}}">
+											Contact no.</a></th>
+									<th th:if="${keyword == null}"><a
+										th:href="@{'/user/search/page/' + ${currentPage} + '/'+ ${pageSize} + '?keyword=' +'&sortField=address&sortDir=' + ${reverseSortDir}}">
+											Address</a></th>
+
+
+									<div sec:authorize="hasAuthority('ADMIN')">
+										<th>Edit user</th>
+										<th>Delete user</th>
+									</div>
+								</tr>
+								<tr th:each="user:${user}" class="table-row">
+									<td th:text=${user.id}>Id</td>
+									<td th:text=${user.firstName}>First Name</td>
+									<td th:text=${user.lastName}>Last Name</td>
+									<td th:text=${user.userName}>User Name</td>
+									<td th:hidden=${user.password}>Password</td>
+									<td th:text=${user.email}>Email</td>
+									<td th:text=${user.contactNo}>Contact no.</td>
+									<td th:text=${user.address}>Address</td>
+									<div sec:authorize="hasAuthority('ADMIN')">
+										<td><a th:href="@{/user/edit/}+${user.id}"
+											class="btn btn-success">Edit</a></td>
+										<td><a th:href="@{/user/delete/}+${user.id}"
+											class="btn btn-danger">Delete</a></td>
+									</div>
+								</tr>
+							</table>
+						</div>
+
+						<div class="panel-footer">
+							<div style="display: inline;">
+								<div>No. of Search items: [[${totalItems}]]</div>
+								<div style="display: inline;" align="right"
+									th:if='${keyword!=null and totalItems>0}'>
+									<ul class="pagination">
+										<li><a th:if="${currentPage > 1}"
+											th:href="@{'/user/search/page/' + ${currentPage - 1}+ '/'+ ${pageSize} + '?keyword=' + ${keyword} +'&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">&laquo;</a>
+											<a th:unless="${currentPage >1}">&laquo;</a></li>
+										<li th:each="i : ${#numbers.sequence(1, totalPages)}"><a
+											th:if="${i==currentpage}" class="active">[[${i}]]</a> <a
+											th:unless="${i==currentpage}"
+											th:href="@{'/user/search/page/' +${i} + '/'+${pageSize}  + '?keyword=' + ${keyword} +'&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+											th:text="${i}"></a></li>
+										<li><a th:if="${currentPage > totalPages}"
+											th:href="@{'/user/search/page/' + ${currentPage + 1}+ '/'+ ${pageSize}  + '?keyword=' + ${keyword} +'&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">&raquo;</a>
+											<a th:unless="${currentPage >totalPages}">&raquo;</a></li>
+									</ul>
+								</div>
+
+								<div style="display: inline;" align="right"
+									th:if='${keyword==null and totalItems>0}'>
+									<ul class="pagination">
+										<li><a th:if="${currentPage > 1}"
+											th:href="@{'/user/search/page/' + ${currentPage - 1}+ '/'+ ${pageSize} + '?keyword=' +'&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">&laquo;</a>
+											<a th:unless="${currentPage >1}">&laquo;</a></li>
+
+										<li th:each="i : ${#numbers.sequence(1, totalPages)}"><a
+											th:if="${i==currentpage}" class="active">[[${i}]]</a> <a
+											th:unless="${i==currentpage}"
+											th:href="@{'/user/search/page/' +${i} + '/'+${pageSize}  + '?keyword='  +'&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+											th:text="${i}"></a></li>
+
+										<li><a th:if="${currentPage > totalPages}"
+											th:href="@{'/user/search/page/' + ${currentPage + 1}+ '/'+ ${pageSize}  + '?keyword=' +'&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">&raquo;</a>
+											<a th:unless="${currentPage >totalPages}">&raquo;</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Users Listing</title>
+	<meta charset="ISO-8859-1">
+	<link type="text/css" media="all" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"
+		rel="stylesheet">
+	<link type="text/css" media="all" href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}"
+		rel="stylesheet">
+	<link type="text/css" media="all" href="../static/css/linearicons/style.css" th:href="@{/css/linearicons/style.css}"
+		rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<link type="text/css" media="all" href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+	<!-- <div th:replace="fragments/layout.html :: navbar"></div> -->
+	<div id="wrapper">
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container-fluid navbar-menu">
+				<div class="brand">
+					<a href="index.html"><img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Logo"
+							class="img-responsive logo"></a>
+				</div>
+				<div id="navbar-menu">
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<span>Hi, Username.</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+							<ul class="dropdown-menu">
+								<li><a href="#"><i class="lnr lnr-user"></i> <span>My Profile</span></a></li>
+								<li><a href="#"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<div th:fragment="sidebar" id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">
+						<li><a th:href="@{~/}" class=""><i class="lnr lnr-home"></i><span>Dashboard</span></a></li>
+						<li><a th:href="@{~/inventory/list}" class=""><i class="lnr lnr-car"></i> <span>View
+									Products</span></a></li>
+						<li><a th:href="@{~/inventory/addproduct}" class=""><i class="lnr lnr-file-add"></i><span>Stock
+									Entry Forms</span></a></li>
+						<li><a th:href="@{~/invusage/showlisting}" class=""><i class="lnr lnr-list"></i> <span>Stock
+									Usage Forms</span></a></li>
+						<li><a th:href="@{~/report/form}" class=""><i class="lnr lnr-chart-bars"></i> <span>Transaction
+									Report</span></a></li>
+						<li><a th:href="@{~/supplier/list}" class=""><i class="lnr lnr-store"></i> <span>Manage
+									Suppliers</span></a></li>
+						<li><a th:href="@{~/user/list}" class="active"><i class="lnr lnr-cog"></i> <span>Manage
+									Users</span></a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+
+		<div class="main">
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<div class="panel">
+						<div class="panel-heading">
+							<h2>Manage User</h2>
+						</div>
+						<div class="panel-body">
+
+							<a th:href="@{/user/add}" class="btn btn-primary">Add User</a>
+							<h3 th:if="${not #lists.isEmpty(user)}">User List</h3>
+							<table th:if="${not #lists.isEmpty(user)}" class="table table-striped">
+								<tr>
+									<th>User Id</th>
+									<th>First Name</th>
+									<th>Last Name</th>
+									<th>User Name</th>
+<!-- 									<th>Password</th> -->
+									<th>Email</th>
+									<th>Contact no.</th>
+									<th>Address</th>
+									<th>Edit user</th>
+									<th>Delete user</th>
+								</tr>
+								<tr th:each="user:${user}" class="table-row">
+									<td th:text=${user.id}>Id</td>
+									<td th:text=${user.firstName}>First Name</td>
+									<td th:text=${user.lastName}>Last Name</td>
+									<td th:text=${user.userName}>User Name</td>
+									<td th:hidden=${user.password}>Password</td>
+									<td th:text=${user.email}>Email</td>
+									<td th:text=${user.contactNo}>Contact no.</td>
+									<td th:text=${user.address}>Address</td>
+									<td><a th:href="@{/user/edit/}+${user.id}" class="btn btn-success">Edit</a></td>
+									<td><a th:href="@{/user/delete/}+${user.id}" class="btn btn-danger">Delete</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>

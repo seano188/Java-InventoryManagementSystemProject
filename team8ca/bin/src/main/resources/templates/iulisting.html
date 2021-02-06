@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Bookings List</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../../css/style.css" th:href="@{/css/style.css}" />
+</head>
+<body>
+	<table>
+		<tr>
+			<td>
+				<p>New form</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<form name="newForm" th:action="@{/invusage/addforms/}+${user.id}">
+					Please input new task's reference/desciption: <input type="text"
+						name="tasks" value="" /> &nbsp; <input type="submit" value="Add" />
+				</form>
+			</td>
+		</tr>
+	</table>
+
+	<table>
+		<tr>
+			<th>Usage Form ID</th>
+			<th>Task Reference</th>
+			<th>Usage Form Date</th>
+			<th>Usage Form Status</th>
+			<th>Creator User</th>
+			<th>Link to edit</th>
+		</tr>
+		<tr th:each="usage:${usageList}">
+			<td th:text=${usage.id}>id</td>
+			<td th:text=${usage.tasks}>id</td>
+			<td th:text=${usage.usageDate}>Usage Date</td>
+			<td th:text=${usage.usageReportStatus}>Usage Form status</td>
+			<td th:text=${usage.user.id}>Creator</td>
+			<td><a href="EditUsage.html"
+				th:href="@{/invusage/usageforms/}+${usage.id}">Edit</a></td>
+		</tr>
+	</table>
+</body>
+</html>

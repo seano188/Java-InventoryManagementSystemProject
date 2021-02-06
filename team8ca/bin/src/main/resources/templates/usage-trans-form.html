@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!-- 	<meta charset="UTF-8" /> -->
+	<meta charset="ISO-8859-1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+	<title>Inventory Management System</title>
+
+	<link type="text/css" media="all" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"
+		rel="stylesheet">
+	<link type="text/css" media="all" href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}"
+		rel="stylesheet">
+	<link type="text/css" media="all" href="../static/css/linearicons/style.css" th:href="@{/css/linearicons/style.css}"
+		rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<link type="text/css" media="all" href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+	<!-- datepicker -->
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+</head>
+
+<body>
+	<!-- 	<nav th:replace="fragments/layout.html :: header"></nav> -->
+	<div id="wrapper">
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container-fluid navbar-menu">
+				<div class="brand">
+					<a href="index.html"><img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Logo"
+							class="img-responsive logo"></a>
+				</div>
+				<div id="navbar-menu">
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<span>Hi, Username.</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+							<ul class="dropdown-menu">
+								<li><a href="#"><i class="lnr lnr-user"></i> <span>My Profile</span></a></li>
+								<li><a href="#"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<div th:fragment="sidebar" id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">
+						<li><a th:href="@{~/}" class=""><i class="lnr lnr-home"></i><span>Dashboard</span></a></li>
+						<li><a th:href="@{~/inventory/list}" class=""><i class="lnr lnr-car"></i> <span>View Products</span></a></li>
+						<li><a th:href="@{~/inventory/addproduct}" class="active"><i class="lnr lnr-file-add"></i><span>Stock Entry Forms</span></a></li>
+						<li><a th:href="@{~/invusage/showlisting}" class=""><i class="lnr lnr-list"></i> <span>Stock Usage Forms</span></a></li>
+						<li><a th:href="@{~/report/form}" class=""><i class="lnr lnr-chart-bars"></i> <span>Transaction Report</span></a></li>
+						<li><a th:href="@{~/supplier/list}" class=""><i class="lnr lnr-store"></i> <span>Manage Suppliers</span></a></li>
+						<li><a th:href="@{~/user/list}" class=""><i class="lnr lnr-cog"></i> <span>Manage Users</span></a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<!-- usageReport -->
+		<div class="main">
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+
+					<div th:if="${error=='invalid'}" class="alert alert-danger alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+								aria-hidden="true">&times;</span></button>
+						<i class="lnr lnr-warning"></i> No inventory found. Please enter a valid productID.
+					</div>
+					<div th:if="${error=='invalid-date'}" class="alert alert-warning alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+								aria-hidden="true">&times;</span></button>
+						<i class="lnr lnr-warning"></i> No transaction found for selected dates.
+					</div>
+
+					<div class="panel shadow">
+						<div class="panel-body">
+							<form th:action="@{/report/generate}" method="POST">
+								<div class="row">
+									<div class="col-lg-2 col-md-2">
+										<h4>ProductID: </h4>
+										<input type="number" class="form-control" name="productId"
+											th:value="${product==null} ? '' : ${product.id}" required>
+									</div>
+								
+								<div class="col-lg-3 col-md-4 col-lg-offset-1 col-md-offset-1">
+									<h4 class="text-left">Please select date range: </h4>
+									<input type="text" class="form-control" name="daterange" id="daterange"
+										style="width: 200;" value="Select dates">
+								</div>
+							</div>
+						
+						<input type="hidden" name="startDate" th:value="${startDate}" id="start">
+						<input type="hidden" name="endDate" th:value="${endDate}" id="end">
+
+						<button type="submit" class="btn btn-success margin-top-30" onclick="submitFunction()"
+							id="generate">Generate report</button>
+						</form>
+					</div>
+				</div>
+
+				<div class="panel shadow" id="report" th:if="${product!=null}">
+					<div class="panel-heading" id="report-heading">
+						<h3>Transaction History: &nbsp;&nbsp;<span th:text="${product.productName}"
+								class="text-primary">Product Name</span></h3>
+						<h3 th:if="${start==null}">All transactions</h3>
+						<h3 th:if="${start!=null}">From:&nbsp;<span id="startDate" th:text="${start}"
+								class="text-primary"></span> &nbsp; &nbsp;To:&nbsp;<span id="endDate" th:text="${end}"
+								class="text-primary"></span></h3>
+					</div>
+					<div class="panel-body no-padding" id="report-body">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Transaction ID</th>
+									<th>UserID</th>
+									<th>Username</th>
+									<th>Date</th>
+									<th>Time</th>
+									<th>Quantity</th>
+									<th>Transaction Type</th>
+									<th>Remaining Stock</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="trans:${transHistory}">
+									<td th:text="${trans.id}">111</td>
+									<td th:text="${trans.user.id}">1</td>
+									<td th:text="${trans.user.userName}">mechanic1</td>
+									<td th:text="${trans.transDate}">2020-12-11</td>
+									<td th:text="${trans.transTime}">23:59</td>
+									<td th:text="${trans.quantity}">1</td>
+									<td th:switch="${trans.transType}">
+										<span th:text="${trans.transType.name()}"
+											th:case="${T(sg.edu.iss.team8ca.model.TransType).Usage}"
+											class="label label-success">Usage</span>
+										<span th:text="${trans.transType.name()}"
+											th:case="${T(sg.edu.iss.team8ca.model.TransType).NewInventory}"
+											class="label label-primary">NewInventory</span>
+										<span th:text="${trans.transType.name()}"
+											th:case="${T(sg.edu.iss.team8ca.model.TransType).ReStock}"
+											class="label label-warning">ReStock</span>
+										<span th:text="${trans.transType.name()}"
+											th:case="${T(sg.edu.iss.team8ca.model.TransType).DebitBack}"
+											class="label label-danger">DebitBack</span>
+									</td>
+									<td th:text="${trans.remainingStock}">100</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="panel-footer">
+						<div class="row">
+							<div class="text-right">
+								<a href="#" class="btn btn-primary" onclick="window.printReport()">Print report</a>
+								<!-- 									<a href="#" th:href="@{/report/form}" class="btn btn-success">Generate new report</a> -->
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+
+
+	</div>
+
+
+
+	<script>
+
+		$(function () {
+			$('input[name="daterange"]').daterangepicker({
+				autoUpdateInput: false,
+				locale: {
+					cancelLabel: 'Clear'
+				},
+
+			}, function (startDate, endDate) {
+				$("#start").val(startDate.format('YYYY-MM-DD'));
+				$("#end").val(endDate.format('YYYY-MM-DD'));
+			});
+		});
+
+		$('input[name="daterange"]').on('apply.daterangepicker', function (ev, picker) {
+			$(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+		});
+
+		$('input[name="daterange"]').on('cancel.daterangepicker', function (ev, picker) {
+			$(this).val('');
+		});
+
+		function printReport() {
+			var mywindow = window.open('', 'PRINT');
+
+			mywindow.document.write('<html><head><title>' + document.title + '</title>');
+			mywindow.document.write('</head><body >');
+			mywindow.document.write('<style>table, th, td {border: 1px solid black;border-collapse: collapse;}</style>')
+			mywindow.document.write('<h1>' + document.title + '</h1>');
+			mywindow.document.write(document.getElementById("report-heading").innerHTML);
+			mywindow.document.write(document.getElementById("report-body").innerHTML);
+			mywindow.document.write('</body></html>');
+
+			mywindow.document.close();
+			mywindow.focus();
+
+			mywindow.print();
+			mywindow.close();
+
+			return true;
+		}
+
+	</script>
+</body>
+
+</html>

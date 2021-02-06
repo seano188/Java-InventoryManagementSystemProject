@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Reorder Report</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../../css/style.css" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+
+	<h1>Reorder</h1>
+	<h2>Inventory Reorder Report for products</h2>
+	<table>
+		<tr >
+			<th >Part No</th>
+			<th >Unit Price</th>
+			<th >Quantity</th>
+			<th >Reorder Quantity</th>
+			<th >Minimum Order Quantity</th>
+		</tr>
+		<tr th:each="invnetory:${inventory}" class="table-row">
+			<td th:text=${inventory.id}>Part No</td>
+			<td th:text=${inventory.originalPrice}>Unit Price</td>
+			<td th:text=${inventory.stockQty}>Quantity</td>
+			<td th:text=${inventory.reorderLevel}>Reorder Quantity</td>
+			<td th:text=${inventory.minimumOrder}>Minimum Order Quantity</td>
+		</tr>
+	</table>
+    <br/>
+
+	
+</body>
+</html>

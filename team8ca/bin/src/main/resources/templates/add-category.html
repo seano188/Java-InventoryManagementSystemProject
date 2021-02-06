@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="ISO-8859-1">
+<link type="text/css" media="all" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"
+		rel="stylesheet">
+	<link type="text/css" media="all" href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}"
+		rel="stylesheet">
+	<link type="text/css" media="all" href="../static/css/linearicons/style.css" th:href="@{/css/linearicons/style.css}"
+		rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<link type="text/css" media="all" href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<title>Insert title here</title>
+</head>
+<body>
+<div id="wrapper">
+		<!-- navbar -->
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container-fluid navbar-menu">
+				<div class="brand">
+					<a href="index.html"><img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Logo"
+							class="img-responsive logo"></a>
+				</div>
+				<div id="navbar-menu">
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<span>Hi, Username.</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+							<ul class="dropdown-menu">
+								<li><a href="#"><i class="lnr lnr-user"></i> <span>My Profile</span></a></li>
+								<li><a href="#"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!-- sidebar -->
+		<div th:fragment="sidebar" id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">
+						<li><a th:href="@{~/}" class=""><i class="lnr lnr-home"></i><span>Dashboard</span></a></li>
+						<li><a th:href="@{~/inventory/list}" class=""><i class="lnr lnr-car"></i> <span>View
+									Products</span></a></li>
+						<li><a th:href="@{~/inventory/addproduct}" class="active"><i class="lnr lnr-file-add"></i>
+								<span>Stock Entry
+									Forms</span></a></li>
+						<li><a th:href="@{~/invusage/showlisting}" class=""><i class="lnr lnr-list"></i> <span>Stock
+									Usage
+									Forms</span></a></li>
+						<li><a th:href="@{~/report/form}" class=""><i class="lnr lnr-chart-bars"></i> <span>Transaction
+									Report</span></a></li>
+						<li><a href="user-form.html" class=""><i class="lnr lnr-cog"></i> <span>Manage Users</span></a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+<div class="main">
+	<div class="main-content">
+		<div class="container-fluid">
+				<form action="" th:action="@{/category/save}" th:object="${category}" method="get">
+					<h3 class="panel-title"> Category Name: </h3>
+						<input type="text" th:field="*{categoryName}" class="form-control"> <br />
+				<button type="submit" class="btn btn-primary">Save</button>
+			</form>
+	
+<table>
+ <tr>
+   <th>ID</th>
+   <th>Category Name</th>
+   <th>Delete</th>
+
+ </tr>
+ <tr th:each="category:${clist}">
+   <td th:text="${category.id}">ID</td> 
+   <td th:text="${category.categoryName}">Category Name</td>
+   <td><a href="DeleteCategory.html" th:href="@{/category/delete}+${category.id}"
+       	class="btn btn-danger">Delete</a></td>
+   </tr>
+   </table> 
+   	</div>
+	</div>
+</div>
+</body>
+</html>

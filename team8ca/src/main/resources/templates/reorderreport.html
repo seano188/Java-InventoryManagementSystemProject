@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Reorder Report</title>
+	<link type="text/css" media="all" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"
+		rel="stylesheet">
+	<link type="text/css" media="all" href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}"
+		rel="stylesheet">
+	<link type="text/css" media="all" href="../static/css/linearicons/style.css" th:href="@{/css/linearicons/style.css}"
+		rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<link type="text/css" media="all" href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+	<div id="wrapper">
+		<!-- navbar -->
+		<nav th:replace="fragments/layout.html :: navbar"></nav>
+		
+		<div th:fragment="sidebar" id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">		
+						<li><a th:href="@{~/inventory/list}" class=""><i class="lnr lnr-car"></i> <span>View Products</span></a></li>
+						<li sec:authorize="hasAuthority('ADMIN')"><a th:href="@{~/inventory/addproduct}" class=""><i class="lnr lnr-file-add"></i><span>Stock Entry Forms</span></a></li>
+						<li><a th:href="@{~/invusage/showlisting}" class="active"><i class="lnr lnr-list"></i> <span>Stock Usage Forms</span></a></li>
+						<li><a th:href="@{~/report/form}" class=""><i class="lnr lnr-chart-bars"></i> <span>Transaction Report</span></a></li>
+						<li sec:authorize="hasAuthority('ADMIN')"><a th:href="@{~/supplier/list}" class=""><i class="lnr lnr-store"></i> <span>Manage Suppliers</span></a></li>
+						<li><a th:href="@{~/customer/list}" class=""><i class="lnr lnr-users"></i> <span>Manage Customers</span></a></li>
+						<li sec:authorize="hasAuthority('ADMIN')"><a th:href="@{~/user/list}" class=""><i class="lnr lnr-cog"></i> <span>Manage Users</span></a></li>				
+					</ul>
+				</nav>
+			</div>
+		</div>
+
+		<div class="main">
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<div class="panel">
+						<div class="panel-heading">
+							<h2>Reorder Report</h2>
+						</div>
+						<div class="panel-body">
+							<br>
+							<h3 th:if="${not #lists.isEmpty(supplier)}">Supplier List</h3>
+							<table th:if="${not #lists.isEmpty(supplier)}" class="table table-striped">
+								<tr>
+									<th>Supplier Id</th>
+									<th>Company Name</th>
+									<th>Generate Report</th>
+								</tr>
+								<tr th:each="supplier:${supplier}" class="table-row">
+									<td th:text=${supplier.id}>Id</td>
+									<td th:text=${supplier.companyName}>Company Name</td>
+									<td th:hidden=${supplier.contactNo}>Contact no</td>
+									<td th:hidden=${supplier.address}>Address</td>
+									<td th:hidden=${supplier.email}>Email id</td>
+									<td th:hidden=${supplier.postalCode}>Postal code</td>
+									<td><a href="Generate.html" th:href="@{/inventory/report/}+${supplier.id}"
+											class="btn btn-success">Generate</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Customer Task Form</title>
+	<link type="text/css" media="all" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"
+		rel="stylesheet">
+	<link type="text/css" media="all" href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}"
+		rel="stylesheet">
+	<link type="text/css" media="all" href="../static/css/linearicons/style.css" th:href="@{/css/linearicons/style.css}"
+		rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<link type="text/css" media="all" href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<style>
+			.tableFixHead { overflow-y: auto; max-height: 350px; }
+			.tableFixHead thead th { position: sticky; top: 0;background:#eee; }
+	</style>
+
+</head>
+
+<body>
+	<div id="wrapper">
+		<!-- navbar -->
+		<nav th:replace="fragments/layout.html :: navbar"></nav>
+		<!-- sidebar -->
+		<div id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">		
+						<li><a th:href="@{~/inventory/list}" class=""><i class="lnr lnr-car"></i> <span>View Products</span></a></li>
+						<li sec:authorize="hasAuthority('ADMIN')"><a th:href="@{~/inventory/addproduct}" class=""><i class="lnr lnr-file-add"></i><span>Stock Entry Forms</span></a></li>
+						<li><a th:href="@{~/invusage/showlisting}" class="active"><i class="lnr lnr-list"></i> <span>Stock Usage Forms</span></a></li>
+						<li><a th:href="@{~/report/form}" class=""><i class="lnr lnr-chart-bars"></i> <span>Transaction Report</span></a></li>
+						<li sec:authorize="hasAuthority('ADMIN')"><a th:href="@{~/supplier/list}" class=""><i class="lnr lnr-store"></i> <span>Manage Suppliers</span></a></li>
+						<li><a th:href="@{~/customer/list}" class=""><i class="lnr lnr-users"></i> <span>Manage Customers</span></a></li>
+						<li sec:authorize="hasAuthority('ADMIN')"><a th:href="@{~/user/list}" class=""><i class="lnr lnr-cog"></i> <span>Manage Users</span></a></li>				
+					</ul>
+				</nav>
+			</div>
+		</div>
+		
+		<div class="main">
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<div class="panel">
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-lg-5 col-md-5">
+									<form action="#" th:object="${customer}"
+										th:action="@{/invusage/addforms/saveusageform/userid/}+${user.id}" method="get"
+										id="userform">
+
+										<h2>Tasks Description</h2>
+										<fieldset class="panel-title">
+											<input type="text" class="form-control" name="task"
+												placeholder="Tasks description here" required />
+										</fieldset>
+
+										<h2>Customer Details</h2>
+										<fieldset class="panel-title">
+											Customer Name <input class="form-control" type="text"
+												th:field="*{customerName}" placeholder="Name" required>
+											<p th:if="${#fields.hasErrors('customerName')}"
+									th:errors="*{customerName}"></p>
+										</fieldset>
+
+										<fieldset class="panel-title">
+											Email <input class="form-control" type="text"
+												th:field="*{email}" placeholder="Email" required>
+											<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+										</fieldset>
+
+										<fieldset class="panel-title">
+											Contact No <input class="form-control" type="text"
+												th:field="*{contactNo}" placeholder="Contact Number" required>
+											<p th:if="${#fields.hasErrors('contactNo')}"
+												th:errors="*{contactNo}"></p>
+										</fieldset>
+
+										<fieldset class="panel-title">
+											Address <input class="form-control" type="text"
+												th:field="*{address}" placeholder="Address" required>
+											<p th:if="${#fields.hasErrors('address')}"
+												th:errors="*{address}"></p>
+										</fieldset>
+										<br />
+										<fieldset class="panel-title">
+											<button type="submit" class="btn btn-primary" value="Save">Save</button>
+										</fieldset>
+									</form>
+								</div>
+						
+								<div class="col-lg-7 col-md-7">
+									<h2>Add Existing Customer Information</h2>
+									<form name="cusSearch"
+										th:action="@{/invusage/addforms/addformdetails/userid/}+${user.id}+@{/customersearch/}+${customer.id}">
+										
+										<div class="input-group" style="width:310px">
+											<input type="text" name="keyword" value="" placeholder="Search details here" class="form-control"/>
+												<span class="input-group-btn"><input type="submit" value="Search" class="btn btn-primary"/></span>
+										</div>
+									</form>
+									<br>
+							
+									<div class="tableFixHead">
+										<table class="table table-striped">
+											<thead>
+											<tr>
+												<th>Customer ID</th>
+												<th>Customer Name</th>
+												<th>Contact Number</th>
+												<th>Email</th>
+												<th>Address</th>
+												<th>Add existing customer</th>
+											</tr>
+											</thead>
+											<tbody>
+										
+											<tr th:each="cus:${customers}">
+												<td th:text=${cus.id}>Customer ID</td>
+												<td th:text=${cus.customerName}>Customer Name</td>
+												<td th:text=${cus.contactNo}>Contact Number</td>
+												<td th:text=${cus.email}>Email</td>
+												<td th:text=${cus.address}>Address</td>
+												<td><a href="AddToForm.html"
+													th:href="@{/invusage/addforms/addformdetails/userid/}+${user.id}+@{/customer/}+${cus.id}" class="btn btn-success">Add
+														to Form</a></td>
+											</tr>
+											</tbody>
+										</table>
+									</div>	
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>
